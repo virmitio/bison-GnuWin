@@ -132,8 +132,8 @@ assembly[bison-GnuWin] {
 
 package-composition {
     symlinks : { 
-        exe => @"${bin}\${each.Name}" = @"${packagedir}\${each.Name}";
-        cmd => @"${bin}\${each.Name}" = @"${packagedir}\${each.Name}";
+        exe => @"${bin}\${each.Name}" = @"${packagedir}\bin\${each.Name}";
+        cmd => @"${bin}\${each.Name}" = @"${packagedir}\bin\${each.Name}";
     };
 }
 
