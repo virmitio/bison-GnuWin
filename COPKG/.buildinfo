@@ -1,0 +1,41 @@
+/* target information */
+@import "version.inc";
+
+#define {
+    NewVersion : "${package-version++}";
+}
+
+#product-info  {
+	product-name: "bison-GnuWin";
+	version: "${NewVersion}";
+	packager: "tim rogers <tiroger@microsoft.com>";
+}
+
+test {
+}
+
+package {
+    uses: update-version;
+    build-command : @"
+        pushd COPKG
+        autopackage bison-gnuwin.autopkg || goto failed
+        popd
+    ";
+}
+
+update-version {
+    default : false;
+    
+    build-command : @"
+        REM auto-increment version.inc file...
+        if ""${noversion}"" equ ""true"" goto endver
+
+        pushd COPKG
+        setlocal EnableDelayedExpansion
+        set VERSTRING=#define { package-version: ${NewVersion}; }
+        echo !VERSTRING! > version.inc
+        popd
+:endver
+    ";
+}
+

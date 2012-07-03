@@ -1,0 +1,153 @@
+@import "version.inc";
+@import "compat.inc";
+@import "outercurve.inc";
+
+#define { 
+    flavor: "${flav??vc10}"; 
+    arch : "${arc??x86}";
+}
+
+package {
+    name: "bison-GnuWin";
+    version: "${package-version}";
+    arch : "${arch}";
+    
+    display-name: "bison-GnuWin";
+    location: "http://coapp.org/repository/${OutputFilename}";
+
+    feed: "http://coapp.org/repository/packages.atom.xml";
+    publisher: "CoApp Project";
+}
+
+files[exe] {
+    root: @"..\bin";
+    
+    include: {
+        "*.exe",
+    };
+    
+    trim-path: all;
+    destination: "bin";
+};
+
+files[cmd] {
+    root: @"..\bin";
+    
+    include: {
+        "*.cmd",
+    };
+    
+    trim-path: all;
+    destination: "bin";
+};
+
+files[share] {
+    root: @"..\share";
+    
+    include: {
+        "**",
+    };
+    
+    trim-path: minimal;
+    destination: "share";
+};
+
+files[man] {
+    root: @"..\man";
+    
+    include: {
+        "**",
+    };
+    
+    trim-path: minimal;
+    destination: "man";
+};
+
+files[dlls] {
+    root: @"..\bin";
+  
+    include: {
+        "*.dll",
+    };
+    
+    trim-path: all;
+};
+
+license[gpl] {
+    license-url: "http://www.gnu.org/licenses/gpl.html";
+    license-type: "gpl";
+}
+
+files[files-to-sign] {
+    include: { 
+        exes,
+        dlls
+    };    
+}
+
+provides {
+    feature: "bison" = "2.4.1";
+}
+
+metadata {
+    summary: "Bison - GNU parser generator";
+    description: @"Bison is a general-purpose parser generator that converts an annotated context-free grammar into a deterministic LR or generalized LR (GLR) parser employing LALR(1) parser tables. As an experimental feature, Bison can also generate IELR(1) or canonical LR(1) parser tables. Once you are proficient with Bison, you can use it to develop a wide range of language parsers, from those used in simple desk calculators to complex programming languages.
+ 
+Bison is upward compatible with Yacc: all properly-written Yacc grammars ought to work with Bison with no change. Anyone familiar with Yacc should be able to use Bison with little trouble. You need to be fluent in C or C++ programming in order to use Bison. Java is also supported as an experimental feature.
+"; // or path to a file...
+    
+    author-version : "2.4.1";
+    stability : "0";
+    licenses : {
+        gpl
+    };
+}
+
+application {
+    include : {
+        exes,
+        cmd,
+        doc,
+        man,
+    };
+}
+
+manifest[things-that-need-them] {
+    // all of our EXEs need to get the manifest entries for the assemblies we're creating in this package
+    
+    assembly : {
+        "bison-GnuWin"
+    };
+    
+    include : { 
+        exes
+    };
+}
+
+assembly[bison-GnuWin] {
+    include : {
+        dlls
+    };
+}
+
+package-composition {
+    symlinks : { 
+        exes => @"${bin}\${each.Name}" = @"${packagedir}\${each.Name}";
+        cmd => @"${bin}\${each.Name}" = @"${packagedir}\${each.Name}";
+    };
+}
+
+signing {
+    attributes : {
+        company="Outercurve Foundation",
+        description="${Package.PackageDetails.SummaryDescription}",
+        product-name="bison-GnuWin",
+        product-version="${package-version}",
+        file-version="${package-version}",
+    };
+    
+    replace-signature: true; 
+    include: { 
+        files-to-sign
+    };    
+}
