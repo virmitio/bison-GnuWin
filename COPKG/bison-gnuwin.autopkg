@@ -80,7 +80,7 @@ license[gpl] {
 
 files[files-to-sign] {
     include: { 
-        exes,
+        exe,
         dlls
     };    
 }
@@ -105,9 +105,9 @@ Bison is upward compatible with Yacc: all properly-written Yacc grammars ought t
 
 application {
     include : {
-        exes,
+        exe,
         cmd,
-        doc,
+        share,
         man,
     };
 }
@@ -120,7 +120,7 @@ manifest[things-that-need-them] {
     };
     
     include : { 
-        exes
+        exe
     };
 }
 
@@ -132,7 +132,7 @@ assembly[bison-GnuWin] {
 
 package-composition {
     symlinks : { 
-        exes => @"${bin}\${each.Name}" = @"${packagedir}\${each.Name}";
+        exe => @"${bin}\${each.Name}" = @"${packagedir}\${each.Name}";
         cmd => @"${bin}\${each.Name}" = @"${packagedir}\${each.Name}";
     };
 }
